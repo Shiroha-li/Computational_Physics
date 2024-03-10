@@ -35,16 +35,6 @@ public:
             rep_state >>= 1;
         }
     };
-    /*void set_state_by_code(long long rep_state){
-        int rem=0;
-        for(int i=0;i<n_spins;i++){
-            rem=rep_state%2;
-            if(rem==1){set_up_spin(i);}
-            else {set_dw_spin(i);}
-            if(rep_state==1){rep_state=0;}
-            rep_state=floor(rep_state/2);
-        };
-    }; */
     double eval_mz()const{
         double Magnetization=0;
         for(int t = 0 ; t < n_spins ; t++){
@@ -66,11 +56,3 @@ public:
         return H;
     };
 };
-/*
-int main(){
-    IsingSystem a(10);
-    a.set_state_by_code(7);
-    std::cout<<a.eval_mz()<<std::endl;
-    std::cout<<a.eval_energy_1D()<<std::endl;
-    return 0;
-};*/

@@ -14,7 +14,10 @@ int main(int argc, const char * argv[])
     spin.flip();
     cout << "Spin state (initiate): " << spin._sz() << endl;
     */
-    const int n_spin = 10;
+    cout << "How many particles?" << endl;
+    int number = 0;
+    cin >> number;
+    const int n_spin = number;
     /*vector<IsingSpin> spin_array(n_spin);
     
     const double J = -1;
@@ -25,7 +28,7 @@ int main(int argc, const char * argv[])
     energy += spin_array[n_spin - 1]._sz() * spin_array[0]._sz();
     energy *= J;
     */
-    IsingSystem ISwithTenParticles(10);
+    IsingSystem ISwithTenParticles(n_spin);
     int Configuration[] = {7,77,777};
     for (int i = 0; i < 3; i++){
         ISwithTenParticles.set_state_by_code(Configuration[i]);
