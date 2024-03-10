@@ -1,10 +1,11 @@
 #include<iostream>
 #include<vector>
 #include"spin.hpp"
+#include"Ising_System.hpp"
 using namespace std;
 int main(int argc, const char * argv[]) 
 {
-    IsingSpin spin;
+    /*IsingSpin spin;
     cout << "Spin state (initiate): " << spin._sz() << endl;
 
     spin.flip();
@@ -12,10 +13,10 @@ int main(int argc, const char * argv[])
 
     spin.flip();
     cout << "Spin state (initiate): " << spin._sz() << endl;
-
+    */
     const int n_spin = 10;
-    vector<IsingSpin> spin_array(n_spin);
-
+    /*vector<IsingSpin> spin_array(n_spin);
+    
     const double J = -1;
     double energy = 0;
     for (int i = 1;i<n_spin;i++) {
@@ -23,8 +24,14 @@ int main(int argc, const char * argv[])
     }
     energy += spin_array[n_spin - 1]._sz() * spin_array[0]._sz();
     energy *= J;
-
-    cout << "Energy = " << energy << endl;
-
+    */
+    IsingSystem ISwithTenParticles(10);
+    int Configuration[] = {7,77,777};
+    for (int i = 0; i < 3; i++){
+        ISwithTenParticles.set_state_by_code(Configuration[i]);
+        cout << "When spin configuration is " << Configuration[i] << endl;
+        cout<< "Magnetization = " << ISwithTenParticles.eval_mz() << endl;
+        cout << "Energy = " << ISwithTenParticles.eval_energy_1D() << endl;
+    }
     return 0;
 }
