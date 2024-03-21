@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/a.out.dir/home/shiroha/Workspace/cp/Ising_Spin/Ising_spin.cpp.o -o a.out 

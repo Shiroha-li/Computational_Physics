@@ -1,17 +1,18 @@
 #include<iostream>
 #include<vector>
 #include<cmath>
-#include"spin.hpp"
+#include"Square_Lattice/SpinOnLattice.hpp"
+using namespace std;
 
 class IsingSystem {
-private:
+protected:
     const double J;
     const int n_spins;
     const long long maxrep_state;
-    std::vector<IsingSpin> spin;
+    vector<IsingSpinOnLattice> spin;
 
 public:
-    IsingSystem(const int n_spins_spec) : J(-1.0), n_spins(n_spins_spec),maxrep_state(static_cast<long long>(std::pow(2,n_spins))-1) {
+    IsingSystem(const int n_spins_spec) : J(-1.0), n_spins(n_spins_spec), maxrep_state(static_cast<long long>(pow(2,n_spins))-1) {
         spin.resize(n_spins);
     };
     virtual ~IsingSystem() {};
@@ -54,5 +55,17 @@ public:
             H *= J;
         }
         return H;
+    };
+  
+    // Additional part in Lattice case
+    void set_dim(int dim) { for (auto& each: spin) each.set_dim(dim); };
+    vector<int> _spin_position(const int site_idx) const {
+        return spin[site_idx]._position();
+    };
+    vector<int> _spin_NN(const int site_idx) const {
+        return spin[site_idx]._NN();
+    };
+    int _spin_NN(const int site_idx, const int bond_idx) const { 
+        return spin[site_idx]._NN(bond_idx);
     };
 };
