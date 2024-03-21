@@ -6,8 +6,8 @@
 
 class IsingSpin{
     private:
-        // sz属性可以用于IsingSpin和SpinOnLattice的对象，表示该点处的spin state
-        int sz;
+    // sz属性可以用于IsingSpin和SpinOnLattice的对象，表示该点处的spin state
+    int sz;
 
     public:
     // initialize sz

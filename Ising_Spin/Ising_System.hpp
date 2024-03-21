@@ -56,7 +56,7 @@ public:
         }
         return H;
     };
-
+  
     // Additional part in Lattice case
     void set_dim(int dim) { for (auto& each: spin) each.set_dim(dim); };
     vector<int> _spin_position(const int site_idx) const {
