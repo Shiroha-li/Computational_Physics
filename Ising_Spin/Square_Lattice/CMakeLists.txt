@@ -10,7 +10,7 @@ FetchContent_MakeAvailable(Catch2)
 cmake_minimum_required(VERSION 3.14)
 set(CMAKE_CXX_STANDARD 14)
 project(Test_of_Catch2 CXX)
-add_executable(a.out ../Ising_spin.cpp)
+add_executable(a.out ../Ising_spin.cpp IsingSpin_Square.cpp)
 target_compile_options(a.out PRIVATE -Wall -Wextra)
 
 # unit tests

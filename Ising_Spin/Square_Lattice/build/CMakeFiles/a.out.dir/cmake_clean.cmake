@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/a.out.dir/IsingSpin_Square.cpp.o"
+  "CMakeFiles/a.out.dir/IsingSpin_Square.cpp.o.d"
   "CMakeFiles/a.out.dir/home/shiroha/Workspace/cp/Ising_Spin/Ising_spin.cpp.o"
   "CMakeFiles/a.out.dir/home/shiroha/Workspace/cp/Ising_Spin/Ising_spin.cpp.o.d"
   "a.out"

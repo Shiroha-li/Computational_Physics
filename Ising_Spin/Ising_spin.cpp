@@ -28,7 +28,8 @@ int main(int argc, const char * argv[])
     energy += spin_array[n_spin - 1]._sz() * spin_array[0]._sz();
     energy *= J;
     */
-    IsingSystem ISwithTenParticles(n_spin);
+    vector<double> beta = {0,1};
+    IsingSystem ISwithTenParticles(n_spin,beta);
     int Configuration[] = {7,77,777};
     for (int i = 0; i < 3; i++){
         ISwithTenParticles.set_state_by_code(Configuration[i]);

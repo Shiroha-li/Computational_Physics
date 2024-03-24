@@ -1,22 +1,22 @@
-Start testing: Mar 21 13:39 CST
+Start testing: Mar 25 02:31 CST
 ----------------------------------------------------------
 1/1 Testing: UnitTests1
 1/1 Test: UnitTests1
 Command: "/home/shiroha/Workspace/cp/Ising_Spin/Square_Lattice/build/UnitTests1_catch2"
 Directory: /home/shiroha/Workspace/cp/Ising_Spin/Square_Lattice/build
-"UnitTests1" start time: Mar 21 13:39 CST
+"UnitTests1" start time: Mar 25 02:31 CST
 Output:
 ----------------------------------------------------------
-Randomness seeded to: 185030380
+Randomness seeded to: 4147408178
 ===============================================================================
 All tests passed (51 assertions in 3 test cases)
 
 <end of output>
-Test time =   0.00 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"UnitTests1" end time: Mar 21 13:39 CST
+"UnitTests1" end time: Mar 25 02:31 CST
 "UnitTests1" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Mar 21 13:39 CST
+End testing: Mar 25 02:31 CST

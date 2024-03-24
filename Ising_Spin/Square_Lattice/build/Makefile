@@ -243,6 +243,30 @@ Catch2WithMain/fast:
 	$(MAKE) $(MAKESILENT) -f _deps/catch2-build/src/CMakeFiles/Catch2WithMain.dir/build.make _deps/catch2-build/src/CMakeFiles/Catch2WithMain.dir/build
 .PHONY : Catch2WithMain/fast
 
+IsingSpin_Square.o: IsingSpin_Square.cpp.o
+.PHONY : IsingSpin_Square.o
+
+# target to build an object file
+IsingSpin_Square.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/IsingSpin_Square.cpp.o
+.PHONY : IsingSpin_Square.cpp.o
+
+IsingSpin_Square.i: IsingSpin_Square.cpp.i
+.PHONY : IsingSpin_Square.i
+
+# target to preprocess a source file
+IsingSpin_Square.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/IsingSpin_Square.cpp.i
+.PHONY : IsingSpin_Square.cpp.i
+
+IsingSpin_Square.s: IsingSpin_Square.cpp.s
+.PHONY : IsingSpin_Square.s
+
+# target to generate assembly for a file
+IsingSpin_Square.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/a.out.dir/build.make CMakeFiles/a.out.dir/IsingSpin_Square.cpp.s
+.PHONY : IsingSpin_Square.cpp.s
+
 Test_IsingSystem_Square.o: Test_IsingSystem_Square.cpp.o
 .PHONY : Test_IsingSystem_Square.o
 
@@ -310,6 +334,9 @@ help:
 	@echo "... Catch2WithMain"
 	@echo "... UnitTests1_catch2"
 	@echo "... a.out"
+	@echo "... IsingSpin_Square.o"
+	@echo "... IsingSpin_Square.i"
+	@echo "... IsingSpin_Square.s"
 	@echo "... Test_IsingSystem_Square.o"
 	@echo "... Test_IsingSystem_Square.i"
 	@echo "... Test_IsingSystem_Square.s"
