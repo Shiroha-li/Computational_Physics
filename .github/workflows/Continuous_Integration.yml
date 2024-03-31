@@ -22,13 +22,13 @@ jobs: # A workflow run is made up of one or more jobs, which run in parallel
       run:  |
           mkdir build
           cd build
-          cmake ../Square_Lattice/
+          cmake ../Ising_Spin/Square_Lattice/
 
-    - name: Build
+    - name: Build1
       working-directory: build
       run: make
       
-    - name: Test
+    - name: Test1
       working-directory: build
       run: ctest
 
@@ -39,10 +39,10 @@ jobs: # A workflow run is made up of one or more jobs, which run in parallel
           cd build
           cmake ../Ising_Spin/
 
-    - name: Build
+    - name: Build2
       working-directory: build
       run: make
       
-    - name: Test
+    - name: Test2
       working-directory: build
       run: ctest
