@@ -24,6 +24,7 @@ TEST_CASE("IsingSystem", "[examples of 10 spins]") {
     vector<double> beta = {0,1};
     IsingSystem model(n_spin,beta);
 
+
     SECTION("basics"){}
 
     SECTION("spin state code #7"){}
@@ -47,6 +48,7 @@ TEST_CASE("IsingSystem_Square", "[examples of 6 x 6 spins]") {
     const vector<int> system_size= {6, 6};
     vector<double> beta = {0.0,1.0};
     IsingSystem_Square model(system_size,beta);
+
     
     SECTION("basics") {
         REQUIRE(model._n_spins()== 36);

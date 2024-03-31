@@ -77,6 +77,7 @@ public:
         }
         return Magnetization;
     };
+
     double eval_energy_1D() const {
         double H=0;
         if( n_spins ==1 &&  _sz(0) ) 

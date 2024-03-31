@@ -73,10 +73,12 @@ class IsingSystem_Square : public IsingSystem {
             r[1] = (r[1] - 1 + system_size[1]) % system_size[1];
             return r;
         };
+  
         // Refactor，NN接受site_idx和bond_idx，返回相邻处的site_idx
         int NN(const int site_idx, const int bond_idx) const { return spin[site_idx]._NN(bond_idx); };
 
         // Evaluate M & E
+
         // 计算Magnetization可以直接用IsingSystem中的eval_mz()方法
         double eval_energy() const {
             double Energy = 0;
@@ -88,7 +90,7 @@ class IsingSystem_Square : public IsingSystem {
             Energy *= J/2;
             return Energy;
         };
-
+  
         double ground_state() const {
             return ground_state_energy;
         };
