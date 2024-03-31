@@ -21,7 +21,9 @@ TEST_CASE("IsingSpinOnLattice","[single spin]"){
 TEST_CASE("IsingSystem", "[examples of 10 spins]") {
     // 实例化了一个有10个粒子的对象model
     const int n_spin = 10;
-    IsingSystem model(n_spin);
+    vector<double> beta = {0,1};
+    IsingSystem model(n_spin,beta);
+
 
     SECTION("basics"){}
 
@@ -44,7 +46,9 @@ TEST_CASE("IsingSystem", "[examples of 10 spins]") {
 
 TEST_CASE("IsingSystem_Square", "[examples of 6 x 6 spins]") {
     const vector<int> system_size= {6, 6};
-    IsingSystem_Square model(system_size);
+    vector<double> beta = {0.0,1.0};
+    IsingSystem_Square model(system_size,beta);
+
     
     SECTION("basics") {
         REQUIRE(model._n_spins()== 36);
@@ -87,7 +91,42 @@ TEST_CASE("IsingSystem_Square", "[examples of 6 x 6 spins]") {
         vector<bool>
             state({1,1,0,1,1,1,0,0,1,1,1,0,1,1,1,1,0,1,0,0,0,0,0,0,1,1,0,1,0,1,1,1,0,0,0,0});
         model.set_state(state);
-        REQUIRE(model.eval_Mz() == 2);
+        REQUIRE(model.eval_mz() == 2);
         REQUIRE_THAT(model.eval_energy(), Catch::Matchers::WithinULP(-4.0, 4));
+    }
+};
+
+TEST_CASE("IsingSystem Square", "[tests for exact counting]") {
+    const vector<int> system_size={6, 6};
+    vector<double>beta={0.1, 1.0, 2.0};
+    IsingSystem_Square model(system_size, beta);
+    vector<bool> pi_state({1,1,0,1,1,1,0,0,1,1,1,0,1,1,1,1,0,1,0,0,0,0,0,0,1,1,0,1,0,1,1,1,0,0,0,0});
+    constexpr double energy=-4.0;
+    constexpr int magz=2;
+    constexpr double w0=1.491824697641270; // exp(-1 * 0.1 * (-4.0))
+    constexpr double w1=54.59815003314424;// exp(-1 * 1.0 * (-4.0))
+    constexpr double w2=2980.957987041728; // exp(-1* 2.0* (-4.0))
+    constexpr double w[3]={w0, w1, w2};
+
+    SECTION("'pi' state : M, E, and Boltzmann weight") {
+        model.set_state(pi_state);
+        long long rep_state = 0;
+        REQUIRE(model.eval_mz() == magz);
+        REQUIRE_THAT(model.eval_energy(), Catch::Matchers::WithinULP(energy, 4));
+        for (size_t beta_idx = 0; beta_idx < beta.size() ; beta_idx++) {
+            REQUIRE_THAT(model.weight_unnormalized(beta[beta_idx],rep_state), Catch::Matchers::WithinULP(w[beta_idx], 4));
+        }
+    }
+
+    SECTION("'pi' state : single term in the whole sum") {
+        long long rep_state = 0;
+        model.exactly_evaluate(pi_state,rep_state);
+        for(size_t beta_idx=0 ; beta_idx < beta.size() ; beta_idx++) {
+            REQUIRE_THAT(model._exact_energy_Z(beta_idx,rep_state), Catch::Matchers::WithinULP(w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_energy_q(beta_idx,rep_state), Catch::Matchers::WithinULP(energy * w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_energy_q_sq(beta_idx,rep_state), Catch::Matchers::WithinULP(energy * energy * w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_magz_Z(beta_idx,rep_state), Catch::Matchers::WithinULP(w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_magz_q_sq(beta_idx,rep_state), Catch::Matchers::WithinULP(magz * magz * w[beta_idx], 4));
+        }
     }
 };
