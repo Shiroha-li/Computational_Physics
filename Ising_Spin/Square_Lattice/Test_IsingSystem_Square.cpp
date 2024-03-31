@@ -45,7 +45,7 @@ TEST_CASE("IsingSystem", "[examples of 10 spins]") {
 
 TEST_CASE("IsingSystem_Square", "[examples of 6 x 6 spins]") {
     const vector<int> system_size= {6, 6};
-    vector<double> beta = {0,1};
+    vector<double> beta = {0.0,1.0};
     IsingSystem_Square model(system_size,beta);
     
     SECTION("basics") {
@@ -108,21 +108,23 @@ TEST_CASE("IsingSystem Square", "[tests for exact counting]") {
 
     SECTION("'pi' state : M, E, and Boltzmann weight") {
         model.set_state(pi_state);
+        long long rep_state = 0;
         REQUIRE(model.eval_mz() == magz);
         REQUIRE_THAT(model.eval_energy(), Catch::Matchers::WithinULP(energy, 4));
         for (size_t beta_idx = 0; beta_idx < beta.size() ; beta_idx++) {
-            REQUIRE_THAT(model.weight_unnormalized(beta[beta_idx]), Catch::Matchers::WithinULP(w[beta_idx], 4));
+            REQUIRE_THAT(model.weight_unnormalized(beta[beta_idx],rep_state), Catch::Matchers::WithinULP(w[beta_idx], 4));
         }
     }
 
     SECTION("'pi' state : single term in the whole sum") {
-        model.exactly_evaluate(pi_state);
+        long long rep_state = 0;
+        model.exactly_evaluate(pi_state,rep_state);
         for(size_t beta_idx=0 ; beta_idx < beta.size() ; beta_idx++) {
-            REQUIRE_THAT(model._exact_energy_Z(beta_idx), Catch::Matchers::WithinULP(w[beta_idx], 4));
-            REQUIRE_THAT(model._exact_energy_q(beta_idx), Catch::Matchers::WithinULP(energy * w[beta_idx], 4));
-            REQUIRE_THAT(model._exact_energy_q_sq(beta_idx), Catch::Matchers::WithinULP(energy * energy * w[beta_idx], 4));
-            REQUIRE_THAT(model._exact_magz_Z(beta_idx), Catch::Matchers::WithinULP(w[beta_idx], 4));
-            REQUIRE_THAT(model._exact_magz_q_sq(beta_idx), Catch::Matchers::WithinULP(magz * magz * w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_energy_Z(beta_idx,rep_state), Catch::Matchers::WithinULP(w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_energy_q(beta_idx,rep_state), Catch::Matchers::WithinULP(energy * w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_energy_q_sq(beta_idx,rep_state), Catch::Matchers::WithinULP(energy * energy * w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_magz_Z(beta_idx,rep_state), Catch::Matchers::WithinULP(w[beta_idx], 4));
+            REQUIRE_THAT(model._exact_magz_q_sq(beta_idx,rep_state), Catch::Matchers::WithinULP(magz * magz * w[beta_idx], 4));
         }
     }
 };

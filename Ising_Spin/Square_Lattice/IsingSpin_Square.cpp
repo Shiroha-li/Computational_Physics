@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int main()
+int main2()
 {
     double start = 0.05; 
     double end = 4.0; 
@@ -16,16 +16,17 @@ int main()
     }
     vector<double> beta(Temperature.size());
     
-    for(int i = 0; i < Temperature.size(); i++) {
+    for (int i = 0; i < Temperature.size(); i++) {
         beta[i] = 1.0 / Temperature[i];
     }
 
-    const vector<int> system_size = { 5, 5 };
-
-    IsingSystem_Square model(system_size,beta);
-    
-    model.exact();
-    model.print_exact();
+    for (int i = 2; i < 6; i++){
+        vector<int> system_size = { i, i };
+        IsingSystem_Square model(system_size, beta);
+        model.exact();
+        model.print_exact();
+    }
+    // model.weight_unnormalized(1,0);
 
     return 0;
 

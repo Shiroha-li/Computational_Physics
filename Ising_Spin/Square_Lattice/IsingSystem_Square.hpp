@@ -15,6 +15,7 @@ class IsingSystem_Square : public IsingSystem {
         vector<double> Z;
         vector<double> C;
         double ground_state_energy;
+        vector<double> state_energy;
 
         // SpinOnLattice的对象spin[site_idx]调用SpinOnLattice的方法set_NN
         // set_NN接受bond_idx和对应的site_idx作为参数，将NN[bond_idx]赋值为site_index(shift...)
@@ -29,6 +30,7 @@ class IsingSystem_Square : public IsingSystem {
                 spin[site_idx].set_NN(3, site_index(shift_neg_y(r)));
             }
         };
+        
 
     public:
         // Constructor, take system_size_spec as input, then initialize system_size and calculate n_spins_spec for IsingSystem
@@ -41,7 +43,8 @@ class IsingSystem_Square : public IsingSystem {
                 M_sq.assign(beta.size(),0);
                 Z.assign(beta.size(),0);
                 C.assign(beta.size(),0);
-                ground_state_energy = eval_energy();
+                //ground_state_energy = eval_energy();
+                //set_state_energy();
             }; 
 
         ~IsingSystem_Square() {};
@@ -71,30 +74,6 @@ class IsingSystem_Square : public IsingSystem {
             r[1] = (r[1] - 1 + system_size[1]) % system_size[1];
             return r;
         };
-
-        // Getting the site index of a neighboring site
-        /*
-        int NN(const int site_idx, const int bond_idx) const {
-            vector<int> r = lattice_coordinate(site_idx);
-            switch(bond_idx){
-                case 0:
-                    return site_index(shift_pos_x(r));
-                    break;
-                case 1:
-                    return site_index(shift_pos_y(r));
-                    break;
-                case 2:
-                    return site_index(shift_neg_x(r));
-                    break;
-                case 3:
-                    return site_index(shift_neg_y(r));
-                    break;
-                default:
-                    return -1;
-                }
-        };
-        */
-
         // Refactor，NN接受site_idx和bond_idx，返回相邻处的site_idx
         int NN(const int site_idx, const int bond_idx) const { return spin[site_idx]._NN(bond_idx); };
 
@@ -115,54 +94,56 @@ class IsingSystem_Square : public IsingSystem {
             return ground_state_energy;
         };
 
-        double weight_unnormalized(const size_t beta_idx) const {
-            return exp(-beta[beta_idx]* ( eval_energy() - ground_state()));
+        double weight_unnormalized(const size_t beta_idx,const long long& rep_state) const {    
+            return exp(-beta[beta_idx]* ( state_energy[rep_state] - ground_state()));
         };
 
-        double _exact_energy_Z(const size_t beta_idx) const {
-            return weight_unnormalized(beta_idx);
+        double _exact_energy_Z(const size_t beta_idx,const long long& rep_state) const {
+            return weight_unnormalized(beta_idx,rep_state);
         };
 
-        double _exact_energy_q(const size_t beta_idx) const {
-            return _exact_energy_Z(beta_idx) * eval_energy();
+        double _exact_energy_q(const size_t beta_idx,const long long& rep_state) const {
+            return _exact_energy_Z(beta_idx,rep_state) * state_energy[rep_state];
         }; 
     
-        double _exact_energy_q_sq(const size_t beta_idx) const {
-            return _exact_energy_q(beta_idx) * eval_energy();
+        double _exact_energy_q_sq(const size_t beta_idx,const long long& rep_state) const {
+            return _exact_energy_q(beta_idx,rep_state) * state_energy[rep_state];
         }; 
    
-        double _exact_magz_Z(const size_t beta_idx) const {
-            return weight_unnormalized(beta_idx);
+        double _exact_magz_Z(const size_t beta_idx,const long long& rep_state) const {
+            return weight_unnormalized(beta_idx,rep_state);
         }; 
 
-        double _exact_magz_q_sq(const size_t beta_idx) const {
-            return _exact_magz_Z(beta_idx) * eval_mz() * eval_mz();
+        double _exact_magz_q_sq(const size_t beta_idx,const long long& rep_state) const {
+            return _exact_magz_Z(beta_idx,rep_state) * eval_mz() * eval_mz();
         }; 
     
-        void exactly_evaluate_given() {
+        void exactly_evaluate_given(const long long &rep_state) {
             for(int i = 0; i < beta.size(); i++) {
-                internal_E[i] += _exact_energy_q(i);
-                internal_E_sq[i] += _exact_energy_q_sq(i);
-                Z[i] += weight_unnormalized(i);
-                M_sq[i] += _exact_magz_q_sq(i);
+                internal_E[i] += _exact_energy_q(i,rep_state);
+                internal_E_sq[i] += _exact_energy_q_sq(i,rep_state);
+                Z[i] += weight_unnormalized(i,rep_state);
+                M_sq[i] += _exact_magz_q_sq(i,rep_state);
             }
         };
 
         // For state in vector form
-        void exactly_evaluate(const vector<bool>& state) {
-            set_state(state),
-            exactly_evaluate_given();
+        void exactly_evaluate(const vector<bool>& state,const long long& rep_state) {
+            set_state(state);
+            state_energy[rep_state] = eval_energy();
+            exactly_evaluate_given(rep_state);
         };
     
         // For state in integer form
         void exactly_evaluate(const long long& rep_state) {
-            std::vector<bool> state = state_by_code(rep_state);
-            exactly_evaluate(state);
+            vector<bool> state = state_by_code(rep_state);
+            exactly_evaluate(state,rep_state);
         };
     
         //going through all the state
         void exact() {
             long long rep_state = 0;
+            initialize_state_energy();
             while (rep_state <= maxrep_state) {
                 exactly_evaluate(rep_state++);
             }
@@ -170,7 +151,7 @@ class IsingSystem_Square : public IsingSystem {
         };
 
         void normalize_direct() {
-            for(int i = 0; i<beta.size(); i++) {
+            for(int i = 0; i < beta.size(); i++) {
                 internal_E[i] *= 1/Z[i];
                 internal_E_sq[i] *= 1/Z[i];
                 M_sq[i] *= 1/Z[i];
@@ -183,17 +164,18 @@ class IsingSystem_Square : public IsingSystem {
         };
 
         void print_exact() const {
-            cout << "Specific Heat: ";
+            cout << "Specific Heat of " << system_size[0] << "x" << system_size[1] << " system : ";
             for (double value : C) {
                 cout << value << "  ";
             }
             cout << "end" << endl;
         
-            cout << "Magnetization (Squared): ";
+            cout << "Magnetization (Squared) of " << system_size[0] << "x" << system_size[1] << " system : ";
             for (double value : M_sq) {
                 cout << value << "  ";
             }
             cout << "end" << endl;
         };
 
+        void initialize_state_energy() { state_energy.resize(maxrep_state+1); };
 };
