@@ -30,7 +30,6 @@ class IsingSystem_Square : public IsingSystem {
                 spin[site_idx].set_NN(3, site_index(shift_neg_y(r)));
             }
         };
-        
 
     public:
         // Constructor, take system_size_spec as input, then initialize system_size and calculate n_spins_spec for IsingSystem

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int main2()
+int main()
 {
     double start = 0.05; 
     double end = 4.0; 
@@ -20,7 +20,7 @@ int main2()
         beta[i] = 1.0 / Temperature[i];
     }
 
-    for (int i = 2; i < 6; i++){
+    for (int i = 2; i < 5; i++){
         vector<int> system_size = { i, i };
         IsingSystem_Square model(system_size, beta);
         model.exact();
